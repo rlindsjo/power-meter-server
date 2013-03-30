@@ -3,8 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Elmätare</title>
-<script type="text/javascript"
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 $(function () {
@@ -12,7 +11,7 @@ $(function () {
     var chart = new Highcharts.Chart({
 	
 	    chart: {
-	        renderTo: 'container',
+	        renderTo: 'gauge-container',
 	        type: 'gauge',
 	        plotBackgroundColor: null,
 	        plotBackgroundImage: null,
@@ -21,11 +20,16 @@ $(function () {
 	    },
 	    
 	    title: {
-	        text: 'Effekt'
+	        text: 'Förbrukning',
 	    },
-	    credits: {
+	    
+		credits: {
 	    	enabled: false
 	    },
+		
+		exporting: {
+			enabled: false			
+		},
 	    
 	    pane: {
 	        startAngle: -150,
@@ -63,7 +67,7 @@ $(function () {
 	    // the value axis
 	    yAxis: {
 	        min: 0,
-	        max: 10,
+	        max: 10000,
 	        
 	        minorTickInterval: 'auto',
 	        minorTickWidth: 1,
@@ -78,33 +82,43 @@ $(function () {
 	        tickColor: '#666',
 	        labels: {
 	            step: 2,
-	            rotation: 'auto'
+	            rotation: 'auto',
+				formatter: function() { return this.value / 1000 + 'K' }
 	        },
 	        title: {
-	            text: 'Kilo Watt'
+	            text: 'Watt'
 	        },
 	        plotBands: [{
 	            from: 0,
-	            to: 1,
+	            to: 1000,
 	            color: '#55BF3B' // green
 	        }, {
-	            from: 1,
-	            to: 5,
+	            from: 1000,
+	            to: 5000,
 	            color: '#DDDF0D' // yellow
 	        }, {
-	            from: 5,
-	            to: 10,
+	            from: 5000,
+	            to: 10000,
 	            color: '#DF5353' // red
 	        }]        
 	    },
 	
 	    series: [{
 	        name: 'Förbrukning',
-	        data: [0.0],
+	        data: [0],
 	        tooltip: {
-	            valueSuffix: ' KW'
+	            valueSuffix: ' W'
 	        }
-	    }]
+	    }],
+		
+		plotOptions: {
+			gauge: {
+				dataLabels: {
+					borderWidth: 0,
+					format: '{y} W'
+				}
+			}
+		}
 	
 	}); 
 
@@ -116,22 +130,18 @@ $(function () {
 		  });
 		  socket.on('power', function(data) {
 		      var point = chart.series[0].points[0];
-		      point.update(data.value);
+		      point.update(Math.floor(data.value * 1000));
 		  });
 	};
 	f(chart);
 });
-		</script>
-		<script>
-  
 </script>
 </head>
 <body>
 	<script src="http://code.highcharts.com/highcharts.js"></script>
 	<script src="http://code.highcharts.com/highcharts-more.js"></script>
-	<script src="http://code.highcharts.com/modules/exporting.js"></script>
 
-	<div id="container" style="width: 400px; height: 300px; margin: 0 auto"></div>
+	<div id="gauge-container" style="width: 400px; height: 300px; margin: 0 auto"></div>
 
 </body>
 </html>
