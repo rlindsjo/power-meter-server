@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Elmätare</title>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+$(function () {
+	
+    var chart = new Highcharts.Chart({
+	
+	    chart: {
+	        renderTo: 'container',
+	        type: 'gauge',
+	        plotBackgroundColor: null,
+	        plotBackgroundImage: null,
+	        plotBorderWidth: 0,
+	        plotShadow: false
+	    },
+	    
+	    title: {
+	        text: 'Effekt'
+	    },
+	    credits: {
+	    	enabled: false
+	    },
+	    
+	    pane: {
+	        startAngle: -150,
+	        endAngle: 150,
+	        background: [{
+	            backgroundColor: {
+	                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+	                stops: [
+	                    [0, '#FFF'],
+	                    [1, '#333']
+	                ]
+	            },
+	            borderWidth: 0,
+	            outerRadius: '109%'
+	        }, {
+	            backgroundColor: {
+	                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+	                stops: [
+	                    [0, '#333'],
+	                    [1, '#FFF']
+	                ]
+	            },
+	            borderWidth: 1,
+	            outerRadius: '107%'
+	        }, {
+	            // default background
+	        }, {
+	            backgroundColor: '#DDD',
+	            borderWidth: 0,
+	            outerRadius: '105%',
+	            innerRadius: '103%'
+	        }]
+	    },
+	       
+	    // the value axis
+	    yAxis: {
+	        min: 0,
+	        max: 10,
+	        
+	        minorTickInterval: 'auto',
+	        minorTickWidth: 1,
+	        minorTickLength: 10,
+	        minorTickPosition: 'inside',
+	        minorTickColor: '#666',
+	
+	        tickPixelInterval: 30,
+	        tickWidth: 2,
+	        tickPosition: 'inside',
+	        tickLength: 10,
+	        tickColor: '#666',
+	        labels: {
+	            step: 2,
+	            rotation: 'auto'
+	        },
+	        title: {
+	            text: 'Kilo Watt'
+	        },
+	        plotBands: [{
+	            from: 0,
+	            to: 1,
+	            color: '#55BF3B' // green
+	        }, {
+	            from: 1,
+	            to: 5,
+	            color: '#DDDF0D' // yellow
+	        }, {
+	            from: 5,
+	            to: 10,
+	            color: '#DF5353' // red
+	        }]        
+	    },
+	
+	    series: [{
+	        name: 'Förbrukning',
+	        data: [0.0],
+	        tooltip: {
+	            valueSuffix: ' KW'
+	        }
+	    }]
+	
+	}); 
+
+	var f = function(chart) {
+		  var socket = io.connect('http://lindsjo.net:3000/');
+		  
+		  socket.on('connect', function () {
+		    socket.emit('power-id', '1234');
+		  });
+		  socket.on('power', function(data) {
+		      var point = chart.series[0].points[0];
+		      point.update(data.value);
+		  });
+	};
+	f(chart);
+});
+		</script>
+		<script>
+  
+</script>
+</head>
+<body>
+	<script src="http://code.highcharts.com/highcharts.js"></script>
+	<script src="http://code.highcharts.com/highcharts-more.js"></script>
+	<script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+	<div id="container" style="width: 400px; height: 300px; margin: 0 auto"></div>
+
+</body>
+</html>
