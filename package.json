@@ -1,6 +1,6 @@
 {
-  "name": "ElectricServer",
-  "description": "ElectricServer app",
+  "name": "PowerMeterServer",
+  "description": "Power Meter server",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
