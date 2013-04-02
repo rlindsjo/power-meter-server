@@ -1,2 +1,2 @@
-PowerMeter
+PowerMeterServer
 
