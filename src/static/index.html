@@ -134,10 +134,16 @@ $(function () {
 		title: {
 			text: "Historisk"
 		},
+		legend: {
+			enabled: false
+		},
         series: [{
-            data: [0],
+            data: [Date.now(), 0],
 			name: "Förbrukning"
         }],
+		xAxis: {
+		            type: 'datetime'
+		},
 		yAxis: {
 			min: 0,
 			max: 10000,
@@ -145,7 +151,10 @@ $(function () {
 	            step: 2,
 	            rotation: 'auto',
 				formatter: function() { return this.value / 1000 + 'K' }
-	        }
+	        },
+			title: {
+				text: null
+			}
 		},
 		
 		credits: {
@@ -170,7 +179,7 @@ $(function () {
 			  var val = Math.floor(data.value * 1000);
 		      point.update(val);
 			  
-			  historyChart.series[0].addPoint(val, true, historyChart.series[0].data.length > 30);
+			  historyChart.series[0].addPoint([Date.now(), val], true, historyChart.series[0].data.length > 30);
 		  });
 	};
 	
