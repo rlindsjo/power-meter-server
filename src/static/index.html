@@ -8,7 +8,7 @@
 <script type="text/javascript">
 $(function () {
 	
-    var chart = new Highcharts.Chart({
+    var gaugeChart = new Highcharts.Chart({
 	
 	    chart: {
 	        renderTo: 'gauge-container',
@@ -122,17 +122,49 @@ $(function () {
 	
 	}); 
 
-	var f = function(chart) {
-		  var socket = io.connect('http://lindsjo.net:3000/');
+    var historyChart = new Highcharts.Chart({
+	
+	    chart: {
+	        renderTo: 'history-container',
+	        type: 'line',
+	        plotBackgroundColor: null,
+	        plotBackgroundImage: null,
+	        plotBorderWidth: 0,
+	        plotShadow: false
+	    },
+		title: {
+			text: "Historisk"
+		},
+        series: [{
+            data: [0]
+        }],
+		yAxis: {
+			min: 0,
+			max: 10000,
+	        labels: {
+	            step: 2,
+	            rotation: 'auto',
+				formatter: function() { return this.value / 1000 + 'K' }
+	        }
+		}
+	});
+
+	var f = function(gaugeChart, historyChart) {
+		  var socket = io.connect(window.location.href);
 		  
 		  socket.on('connect', function () {
 		    socket.emit('power-id', '1234');
 		  });
+		  
 		  socket.on('power', function(data) {
-		      var point = chart.series[0].points[0];
-		      point.update(Math.floor(data.value * 1000));
+		      var point = gaugeChart.series[0].points[0];
+			  var val = Math.floor(data.value * 1000);
+		      point.update(val);
+			  
+			  historyChart.series[0].update(val, true, true);
 		  });
 	};
+	
 	f(chart);
 });
 </script>
@@ -142,6 +174,7 @@ $(function () {
 	<script src="http://code.highcharts.com/highcharts-more.js"></script>
 
 	<div id="gauge-container" style="width: 400px; height: 300px; margin: 0 auto"></div>
+	<div id="history-container" style="width: 400px; height: 300px; margin: 0 auto"></div>
 
 </body>
 </html>
