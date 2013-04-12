@@ -75,6 +75,7 @@ $(function () {
 	        minorTickPosition: 'inside',
 	        minorTickColor: '#666',
 	
+			tickInterval: 1000,
 	        tickPixelInterval: 30,
 	        tickWidth: 2,
 	        tickPosition: 'inside',
@@ -147,9 +148,9 @@ $(function () {
 		yAxis: {
 			min: 0,
 			max: 10000,
+			tickInterval: 1000,
 	        labels: {
 	            step: 2,
-	            rotation: 'auto',
 				formatter: function() { return this.value / 1000 + 'K' }
 	        },
 			title: {
