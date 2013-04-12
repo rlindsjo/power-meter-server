@@ -161,7 +161,7 @@ $(function () {
 			  var val = Math.floor(data.value * 1000);
 		      point.update(val);
 			  
-			  historyChart.series[0].update(val, true, true);
+			  historyChart.series[0].addPoint(val, true, historyChart.series[0].data.length > 120);
 		  });
 	};
 	
