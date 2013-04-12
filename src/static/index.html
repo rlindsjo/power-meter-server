@@ -118,8 +118,7 @@ $(function () {
 					format: '{y} W'
 				}
 			}
-		}
-	
+		}	
 	}); 
 
     var historyChart = new Highcharts.Chart({
@@ -136,7 +135,8 @@ $(function () {
 			text: "Historisk"
 		},
         series: [{
-            data: [0]
+            data: [0],
+			name: "Förbrukning"
         }],
 		yAxis: {
 			min: 0,
@@ -146,7 +146,16 @@ $(function () {
 	            rotation: 'auto',
 				formatter: function() { return this.value / 1000 + 'K' }
 	        }
+		},
+		
+		credits: {
+	    	enabled: false
+	    },
+		
+		exporting: {
+			enabled: false			
 		}
+
 	});
 
 	var f = function(gaugeChart, historyChart) {
@@ -161,7 +170,7 @@ $(function () {
 			  var val = Math.floor(data.value * 1000);
 		      point.update(val);
 			  
-			  historyChart.series[0].addPoint(val, true, historyChart.series[0].data.length > 120);
+			  historyChart.series[0].addPoint(val, true, historyChart.series[0].data.length > 30);
 		  });
 	};
 	
