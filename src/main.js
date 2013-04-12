@@ -4,6 +4,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
 var currentUsage = [];
+var currentHistory = [];
 
 app.use(express.bodyParser());
 
@@ -19,19 +20,21 @@ app.get('/:id/current.json', function(req, res) {
 
 app.post('/:id', function(req, res) {
 	res.send('OK');
-	currentUsage[req.params.id] = parseFloat(req.body.value);
+	var currentValue = parseFloat(req.body.value);
+	currentUsage[req.params.id] = currentValue;
 });
 
 app.use(express.static(__dirname + '/static'));
-
 
 io.sockets.on('connection', function (socket) {
 		socket.on('power-id', function(data) {
 		  var id = data;
 		  console.log('Connect for id ' + id);	
-		  currentUsage[id] = 0;
 		  setInterval(function() {
-			  socket.emit('power', { value: currentUsage[id] });
+			  var val = currentUsage[id];
+			  if (typeof(val) !== 'undefined') {
+				  socket.emit('power', { value: val });			  	
+			  }
 		  }, 5000);
 		});
 	});
