@@ -20,6 +20,9 @@ exports.create = function() {
 			var holder = get(id);
 			holder.current = value;
 			holder.history.push(value);
+			if (holder.history.length > 30) {
+				holder.history.shift();
+			}
 		},
 		history: function(id) {
 			return get(id).history;

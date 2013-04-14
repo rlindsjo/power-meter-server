@@ -17,4 +17,15 @@ exports['test setting 1 value has that value as history'] = function() {
   assert.equal(1, history[0], 'Incorrect stored value')
 }
 
+exports['test setting many values limits history to last 30 values'] = function() {
+  var val;
+  for (val = 1; val <= 40; val ++) {
+    store.store('limit', val)
+  }
+  var history = store.history('limit')
+  assert.equal(history.length, 30, 'Incorrect number of stored values')
+  assert.equal(history[0], 11, 'Incorrect stored first value')
+  assert.equal(history[29], 40, 'Incorrect stored last value')
+}
+
 if (module == require.main) require('test').run(exports)
