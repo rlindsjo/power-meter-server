@@ -197,7 +197,7 @@ $(function () {
 			  var val = Math.floor(data.value * 1000);
 		      point.update(val);
 			  
-			  historyChart.series[0].addPoint([Date.now(), val], true, true);
+			  historyChart.series[0].addPoint([Date.now(), val], true, historyChart.series[0] >= 30);
 		  });
 	};
 	
