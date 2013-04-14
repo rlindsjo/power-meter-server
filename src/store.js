@@ -17,7 +17,12 @@ exports.create = function() {
 		},
 		store: function(id, rawValue) {
 			var value = parseFloat(rawValue);
-			get(id).current = value;
+			var holder = get(id);
+			holder.current = value;
+			holder.history.push(value);
+		},
+		history: function(id) {
+			return get(id).history;
 		}
 	}
 }
