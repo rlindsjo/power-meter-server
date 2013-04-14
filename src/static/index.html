@@ -185,7 +185,7 @@ $(function () {
 			  var val = Math.floor(data.value * 1000);
 		      var point = gaugeChart.series[0].points[0];
 		      point.update(val);
-			  var time = Date.now() - 5000 * 29;
+			  var time = Date.now() - 5000 * (data.history.length - 1);
 			  for (var i = 0, len = data.history.length; i < len; i++) {
 				  historyChart.series[0].addPoint([time, Math.floor(data.history[i] * 1000)], true, false);
 				  time += 5000;
