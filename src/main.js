@@ -3,7 +3,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
-var store = require('./store');
+var store = require('./store').create();
 
 app.use(express.bodyParser());
 
@@ -29,13 +29,14 @@ app.use(express.static(__dirname + '/static'));
 io.sockets.on('connection', function (socket) {
 	socket.on('power-id', function(data) {
 		var id = data;
-		console.log('Connect for id ' + id);	
+		console.log('Connect for id ' + id);
+		socket.emit('setup', { value : store.current(id), history : store.history(id) });
 		setInterval(function() {
+			var json = currentJson(id);
 			socket.emit('power', currentJson(id));
 		}, 5000);
 	});
 });
-
 
 server.listen(3000);
 
