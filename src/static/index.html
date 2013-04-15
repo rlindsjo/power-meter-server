@@ -196,7 +196,7 @@ $(function () {
 		      var point = gaugeChart.series[0].points[0];
 			  var val = Math.floor(data.value * 1000);
 		      point.update(val);	
-			  historyChart.series[0].addPoint([Date.now(), val], true, historyChart.series[0].length >= 30);
+			  historyChart.series[0].addPoint([Date.now(), val], true, historyChart.series[0].data.length >= 30);
 		  });
 	};
 	
